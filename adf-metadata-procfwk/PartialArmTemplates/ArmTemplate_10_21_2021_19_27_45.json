@@ -1,0 +1,37 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-metadata-procfwk"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/FrameworkFunctions')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Interact with the Azure Functions App used as middle ware when making requests to Worker pipelines. Authentication done at the Function App level.",
+				"annotations": [
+					"procfwk"
+				],
+				"type": "AzureFunction",
+				"typeProperties": {
+					"functionAppUrl": "https://metadata-procfwk.azurewebsites.net",
+					"functionKey": {
+						"type": "SecureString",
+						"value": "**********"
+					},
+					"authentication": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
