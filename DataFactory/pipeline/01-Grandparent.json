@@ -4,7 +4,7 @@
 		"description": "procfwk grandparent pipeline used optionally to bootstrap any wider processes in your Data Factory that then calls the processing framework.",
 		"activities": [
 			{
-				"name": "procfwk",
+				"name": "AR - FrameworkFactory",
 				"description": "Call procfwk",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
