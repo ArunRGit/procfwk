@@ -3368,7 +3368,7 @@
 									},
 									"type": "Guid"
 								},
-								"ExecutionUser": {
+								"UpdatedBy": {
 									"value": {
 										"value": "@pipeline().TriggerName",
 										"type": "Expression"
