@@ -13,6 +13,7 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": [],
 				"typeProperties": {
 					"storedProcedureName": "[dbo].[USPInsertSampleSource]",
 					"storedProcedureParameters": {
@@ -23,7 +24,7 @@
 							},
 							"type": "Guid"
 						},
-						"ExecutionUser": {
+						"UpdatedBy": {
 							"value": {
 								"value": "@pipeline().TriggerName",
 								"type": "Expression"
