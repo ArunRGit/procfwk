@@ -75,7 +75,7 @@
 					"storedProcedureName": "[dbo].[USPInsertSampleSource]",
 					"storedProcedureParameters": {
 						"AffectedByExecutionId": {
-							"value": "",
+							"value": "9598a701-49ab-4e2a-9fbf-6ee1e1d8bcdf",
 							"type": "Guid"
 						},
 						"AffectedRecordCount": {
