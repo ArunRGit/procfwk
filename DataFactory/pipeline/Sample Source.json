@@ -26,28 +26,28 @@
 					"storedProcedureParameters": {
 						"AffectedRecordCount": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.firstRow.AffectedRecordCount",
+								"value": "@activity('run sample stored proc').output.AffectedRecordCount",
 								"type": "Expression"
 							},
 							"type": "Int32"
 						},
 						"AffectedTable": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.firstRow.AffectedTable",
+								"value": "@activity('run sample stored proc').output.AffectedTable",
 								"type": "Expression"
 							},
 							"type": "String"
 						},
 						"AffectedTableSchema": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.firstRow.AffectedTableSchema",
+								"value": "@activity('run sample stored proc').output.AffectedTableSchema",
 								"type": "Expression"
 							},
 							"type": "String"
 						},
 						"AffectedByExecutionId": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.firstRow.AffectedByExecutionId",
+								"value": "@activity('run sample stored proc').output.AffectedByExecutionId",
 								"type": "Expression"
 							},
 							"type": "Guid"
