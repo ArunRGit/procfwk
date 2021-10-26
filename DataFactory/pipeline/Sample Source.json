@@ -7,7 +7,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Set Affected Exec Id",
+						"activity": "run sample SP through lookup",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -26,28 +26,28 @@
 					"storedProcedureParameters": {
 						"AffectedRecordCount": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.AffectedRecordCount\n",
+								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedRecordCount\n",
 								"type": "Expression"
 							},
 							"type": "Int32"
 						},
 						"AffectedTable": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.AffectedTable",
+								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedTable",
 								"type": "Expression"
 							},
 							"type": "String"
 						},
 						"AffectedTableSchema": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.AffectedTableSchema",
+								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedTableSchema",
 								"type": "Expression"
 							},
 							"type": "String"
 						},
 						"AffectedByExecutionId": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.AffectedByExecutionId",
+								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedByExecutionId",
 								"type": "Expression"
 							},
 							"type": "Guid"
@@ -105,22 +105,48 @@
 				}
 			},
 			{
-				"name": "Set Affected Exec Id",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "run sample stored proc",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"name": "run sample SP through lookup",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "ImpactExecutionId",
-					"value": {
-						"value": "@activity('run sample stored proc').output.AffectedByExecutionId",
-						"type": "Expression"
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[USPInsertSampleSource]",
+						"storedProcedureParameters": {
+							"AffectedByExecutionId": {
+								"type": "Guid"
+							},
+							"AffectedRecordCount": {
+								"type": "Int32"
+							},
+							"AffectedTable": {
+								"type": "String"
+							},
+							"AffectedTableSchema": {
+								"type": "String"
+							},
+							"ExecutionId": {
+								"type": "Guid",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "GetSetMetadata",
+						"type": "DatasetReference"
 					}
 				}
 			}
