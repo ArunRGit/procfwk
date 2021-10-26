@@ -40,15 +40,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[dbo].[USPInsertSampleSource]",
+					"storedProcedureName": "procfwk.SetImpactCount",
 					"storedProcedureParameters": {
-						"AffectedByExecutionId": {
-							"value": {
-								"value": "@variables('ImpactExecutionId')",
-								"type": "Expression"
-							},
-							"type": "Guid"
-						},
 						"AffectedRecordCount": {
 							"value": {
 								"value": "@int(variables('ImpactCount'))",
@@ -71,12 +64,11 @@
 							"type": "String"
 						},
 						"ExecutionId": {
-							"value": "",
+							"value": {
+								"value": "@variables('ImpactExecutionId')",
+								"type": "Expression"
+							},
 							"type": "Guid"
-						},
-						"UpdatedBy": {
-							"value": "",
-							"type": "String"
 						}
 					}
 				},
