@@ -679,7 +679,7 @@
 								},
 								"UpdatedBy": {
 									"value": {
-										"value": "string(@pipeline().parameters.WaitTime)",
+										"value": "@string(pipeline().parameters.WaitTime)",
 										"type": "Expression"
 									},
 									"type": "String"
