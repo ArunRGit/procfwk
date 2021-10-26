@@ -672,14 +672,14 @@
 							"storedProcedureParameters": {
 								"ExecutionId": {
 									"value": {
-										"value": "string(@pipeline().parameters.WaitTime)",
+										"value": "@pipeline().RunId",
 										"type": "Expression"
 									},
 									"type": "Guid"
 								},
 								"UpdatedBy": {
 									"value": {
-										"value": "@pipeline().TriggerName",
+										"value": "string(@pipeline().parameters.WaitTime)",
 										"type": "Expression"
 									},
 									"type": "String"
