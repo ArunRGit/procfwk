@@ -122,16 +122,20 @@
 						"sqlReaderStoredProcedureName": "[dbo].[USPInsertSampleSource]",
 						"storedProcedureParameters": {
 							"AffectedByExecutionId": {
-								"type": "Guid"
+								"type": "Guid",
+								"value": "9598a701-49ab-4e2a-9fbf-6ee1e1d8bcdf"
 							},
 							"AffectedRecordCount": {
-								"type": "Int32"
+								"type": "Int32",
+								"value": "0"
 							},
 							"AffectedTable": {
-								"type": "String"
+								"type": "String",
+								"value": "dd"
 							},
 							"AffectedTableSchema": {
-								"type": "String"
+								"type": "String",
+								"value": "dd"
 							},
 							"ExecutionId": {
 								"type": "Guid",
