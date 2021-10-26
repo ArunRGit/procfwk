@@ -13,6 +13,7 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": [],
 				"typeProperties": {
 					"storedProcedureName": "[dbo].[USPInsertSampleSource]",
 					"storedProcedureParameters": {
@@ -43,7 +44,8 @@
 		],
 		"parameters": {
 			"WaitTime": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": 0
 			}
 		},
 		"folder": {
