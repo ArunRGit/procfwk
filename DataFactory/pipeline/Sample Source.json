@@ -79,15 +79,15 @@
 							"type": "Guid"
 						},
 						"AffectedRecordCount": {
-							"value": "",
+							"value": "0",
 							"type": "Int32"
 						},
 						"AffectedTable": {
-							"value": "",
+							"value": "dummy",
 							"type": "String"
 						},
 						"AffectedTableSchema": {
-							"value": "",
+							"value": "dummy",
 							"type": "String"
 						},
 						"ExecutionId": {
