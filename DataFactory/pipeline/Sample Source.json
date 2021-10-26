@@ -47,52 +47,7 @@
 						},
 						"AffectedByExecutionId": {
 							"value": {
-								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedByExecutionId",
-								"type": "Expression"
-							},
-							"type": "Guid"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "SupportDatabase",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "run sample stored proc",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "[dbo].[USPInsertSampleSource]",
-					"storedProcedureParameters": {
-						"AffectedByExecutionId": {
-							"value": "9598a701-49ab-4e2a-9fbf-6ee1e1d8bcdf",
-							"type": "Guid"
-						},
-						"AffectedRecordCount": {
-							"value": "0",
-							"type": "Int32"
-						},
-						"AffectedTable": {
-							"value": "dummy",
-							"type": "String"
-						},
-						"AffectedTableSchema": {
-							"value": "dummy",
-							"type": "String"
-						},
-						"ExecutionId": {
-							"value": {
-								"value": "@pipeline().RunId",
+								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedExecutionId",
 								"type": "Expression"
 							},
 							"type": "Guid"
