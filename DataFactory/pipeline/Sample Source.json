@@ -145,7 +145,7 @@
 				"typeProperties": {
 					"variableName": "ImpactExecutionId",
 					"value": {
-						"value": "@activity('run sample stored proc_copy1').output.firstRow.AffectedByExecutionId ",
+						"value": "@activity('run sample stored proc').output.firstRow.AffectedByExecutionId ",
 						"type": "Expression"
 					}
 				}
@@ -165,7 +165,7 @@
 				"typeProperties": {
 					"variableName": "ImpactTableSchema",
 					"value": {
-						"value": "@activity('run sample stored proc_copy1').output.firstRow.AffectedTableSchema",
+						"value": "@activity('run sample stored proc').output.firstRow.AffectedTableSchema",
 						"type": "Expression"
 					}
 				}
@@ -185,7 +185,7 @@
 				"typeProperties": {
 					"variableName": "ImpactTableName",
 					"value": {
-						"value": "@activity('run sample stored proc_copy1').output.firstRow.AffectedTable",
+						"value": "@activity('run sample stored proc').output.firstRow.AffectedTable",
 						"type": "Expression"
 					}
 				}
@@ -205,7 +205,7 @@
 				"typeProperties": {
 					"variableName": "ImpactCount",
 					"value": {
-						"value": "@activity('run sample stored proc_copy1').output.firstRow.AffectedRecordCount",
+						"value": "@activity('run sample stored proc').output.firstRow.AffectedRecordCount",
 						"type": "Expression"
 					}
 				}
