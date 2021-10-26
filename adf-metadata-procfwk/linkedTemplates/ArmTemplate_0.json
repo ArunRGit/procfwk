@@ -656,6 +656,81 @@
 			"properties": {
 				"activities": [
 					{
+						"name": "Update Impact Count",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Set Impact Exec Id",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Set Impact Schema",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Set Impact Table",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Set Impact SCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "procfwk.SetImpactCount",
+							"storedProcedureParameters": {
+								"AffectedRecordCount": {
+									"value": {
+										"value": "@int(variables('ImpactCount'))",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"AffectedTable": {
+									"value": {
+										"value": "@variables('ImpactTableName')",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"AffectedTableSchema": {
+									"value": {
+										"value": "@variables('ImpactTableSchema')",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"ExecutionId": {
+									"value": {
+										"value": "@variables('ImpactExecutionId')",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "SupportDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
 						"name": "run sample stored proc",
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [],
@@ -670,25 +745,114 @@
 						"typeProperties": {
 							"storedProcedureName": "[[dbo].[USPInsertSampleSource]",
 							"storedProcedureParameters": {
+								"AffectedByExecutionId": {
+									"value": "",
+									"type": "Guid"
+								},
+								"AffectedRecordCount": {
+									"value": "",
+									"type": "Int32"
+								},
+								"AffectedTable": {
+									"value": "",
+									"type": "String"
+								},
+								"AffectedTableSchema": {
+									"value": "",
+									"type": "String"
+								},
 								"ExecutionId": {
 									"value": {
 										"value": "@pipeline().RunId",
 										"type": "Expression"
 									},
 									"type": "Guid"
-								},
-								"UpdatedBy": {
-									"value": {
-										"value": "@string(pipeline().parameters.WaitTime)",
-										"type": "Expression"
-									},
-									"type": "String"
 								}
 							}
 						},
 						"linkedServiceName": {
 							"referenceName": "SupportDatabase",
 							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set Impact Exec Id",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "run sample stored proc",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "ImpactExecutionId",
+							"value": {
+								"value": "@activity('run sample stored proc').output.firstRow.AffectedByExecutionId ",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Impact Schema",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "run sample stored proc",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "ImpactTableSchema",
+							"value": {
+								"value": "@activity('run sample stored proc').output.firstRow.AffectedTableSchema",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Impact Table",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "run sample stored proc",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "ImpactTableName",
+							"value": {
+								"value": "@activity('run sample stored proc').output.firstRow.AffectedTable",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Impact SCount",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "run sample stored proc",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "ImpactCount",
+							"value": {
+								"value": "@activity('run sample stored proc').output.firstRow.AffectedRecordCount",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -700,6 +864,20 @@
 					"WaitTime": {
 						"type": "int",
 						"defaultValue": 0
+					}
+				},
+				"variables": {
+					"ImpactTableSchema": {
+						"type": "String"
+					},
+					"ImpactTableName": {
+						"type": "String"
+					},
+					"ImpactCount": {
+						"type": "String"
+					},
+					"ImpactExecutionId": {
+						"type": "String"
 					}
 				},
 				"folder": {
