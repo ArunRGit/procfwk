@@ -3363,7 +3363,7 @@
 							"storedProcedureParameters": {
 								"ExecutionId": {
 									"value": {
-										"value": "@pipeline()?.TriggeredByPipelineRunId",
+										"value": "string(@pipeline().parameters.WaitTime)",
 										"type": "Expression"
 									},
 									"type": "Guid"
@@ -3386,6 +3386,12 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"WaitTime": {
+						"type": "int",
+						"defaultValue": 0
+					}
 				},
 				"folder": {
 					"name": "_Workers/_Template"
