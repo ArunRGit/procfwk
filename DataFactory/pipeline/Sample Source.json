@@ -7,7 +7,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "run sample stored proc",
+						"activity": "Set Affected Exec Id",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -102,6 +102,26 @@
 				"linkedServiceName": {
 					"referenceName": "SupportDatabase",
 					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set Affected Exec Id",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "run sample stored proc",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "ImpactExecutionId",
+					"value": {
+						"value": "@activity('run sample stored proc').output.AffectedByExecutionId",
+						"type": "Expression"
+					}
 				}
 			}
 		],
