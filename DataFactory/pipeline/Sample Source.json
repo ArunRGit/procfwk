@@ -33,7 +33,7 @@
 						},
 						"AffectedTable": {
 							"value": {
-								"value": "@activity('run sample SP through lookup').output.firstRow.AffectedTable",
+								"value": "@pipeline().RunId",
 								"type": "Expression"
 							},
 							"type": "String"
