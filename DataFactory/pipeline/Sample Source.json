@@ -26,7 +26,7 @@
 					"storedProcedureParameters": {
 						"AffectedRecordCount": {
 							"value": {
-								"value": "@activity('run sample stored proc').output.AffectedRecordCount",
+								"value": "@activity('run sample stored proc').output.AffectedRecordCount\n",
 								"type": "Expression"
 							},
 							"type": "Int32"
