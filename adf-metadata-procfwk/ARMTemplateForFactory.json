@@ -3351,7 +3351,7 @@
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
-								"activity": "run sample SP through lookup",
+								"activity": "run load SP through lookup",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -3370,21 +3370,21 @@
 							"storedProcedureParameters": {
 								"AffectedRecordCount": {
 									"value": {
-										"value": "@activity('run sample SP through lookup').output.firstRow.AffectedRecordCount\n",
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedRecordCount\n",
 										"type": "Expression"
 									},
 									"type": "Int32"
 								},
 								"AffectedTable": {
 									"value": {
-										"value": "@activity('run sample SP through lookup').output.firstRow.AffectedTable",
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedTable",
 										"type": "Expression"
 									},
 									"type": "String"
 								},
 								"AffectedTableSchema": {
 									"value": {
-										"value": "@activity('run sample SP through lookup').output.firstRow.AffectedTableSchema",
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedTableSchema",
 										"type": "Expression"
 									},
 									"type": "String"
@@ -3404,7 +3404,7 @@
 						}
 					},
 					{
-						"name": "run sample SP through lookup",
+						"name": "run load SP through lookup",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -4122,6 +4122,304 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/01-Grandparent')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Sample Stage')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Update Impact Count",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "run load SP through lookup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "procfwk.SetImpactCount",
+							"storedProcedureParameters": {
+								"AffectedRecordCount": {
+									"value": {
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedRecordCount\n",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"AffectedTable": {
+									"value": {
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedTable",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"AffectedTableSchema": {
+									"value": {
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedTableSchema",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"AffectedByExecutionId": {
+									"value": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "SupportDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "run load SP through lookup",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[[srcStg].[USPInsertSampleStage]",
+								"storedProcedureParameters": {
+									"AffectedByExecutionId": {
+										"type": "Guid",
+										"value": "9598a701-49ab-4e2a-9fbf-6ee1e1d8bcdf"
+									},
+									"AffectedRecordCount": {
+										"type": "Int32",
+										"value": "0"
+									},
+									"AffectedTable": {
+										"type": "String",
+										"value": "dd"
+									},
+									"AffectedTableSchema": {
+										"type": "String",
+										"value": "dd"
+									},
+									"ExecutionId": {
+										"type": "Guid",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "GetSetMetadata",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"WaitTime": {
+						"type": "int",
+						"defaultValue": 0
+					}
+				},
+				"variables": {
+					"ImpactTableSchema": {
+						"type": "String"
+					},
+					"ImpactTableName": {
+						"type": "String"
+					},
+					"ImpactCount": {
+						"type": "String"
+					},
+					"ImpactExecutionId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "_Workers/_Template"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SupportDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/GetSetMetadata')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Sample Preload')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Update Impact Count",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "run load SP through lookup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "procfwk.SetImpactCount",
+							"storedProcedureParameters": {
+								"AffectedRecordCount": {
+									"value": {
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedRecordCount\n",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"AffectedTable": {
+									"value": {
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedTable",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"AffectedTableSchema": {
+									"value": {
+										"value": "@activity('run load SP through lookup').output.firstRow.AffectedTableSchema",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"AffectedByExecutionId": {
+									"value": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"type": "Guid"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "SupportDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "run load SP through lookup",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[[dmConv].[USPTPreloadSample]",
+								"storedProcedureParameters": {
+									"AffectedByExecutionId": {
+										"type": "Guid",
+										"value": "9598a701-49ab-4e2a-9fbf-6ee1e1d8bcdf"
+									},
+									"AffectedRecordCount": {
+										"type": "Int32",
+										"value": "0"
+									},
+									"AffectedTable": {
+										"type": "String",
+										"value": "dd"
+									},
+									"AffectedTableSchema": {
+										"type": "String",
+										"value": "dd"
+									},
+									"ExecutionId": {
+										"type": "Guid",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "GetSetMetadata",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"WaitTime": {
+						"type": "int",
+						"defaultValue": 0
+					}
+				},
+				"variables": {
+					"ImpactTableSchema": {
+						"type": "String"
+					},
+					"ImpactTableName": {
+						"type": "String"
+					},
+					"ImpactCount": {
+						"type": "String"
+					},
+					"ImpactExecutionId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "_Workers/_Template"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SupportDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/GetSetMetadata')]"
 			]
 		}
 	]
